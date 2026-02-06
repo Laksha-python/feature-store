@@ -1,0 +1,4 @@
+feature_name,last_updated_at,expected_frequency_hours,status
+user_event_count_last_7d,2026-02-06T15:09:32.570301,24,fresh
+user_purchase_count_last_30d,2026-02-06T15:09:32.570301,24,fresh
+user_avg_purchase_value_last_30d,2026-02-06T15:09:32.570301,24,fresh

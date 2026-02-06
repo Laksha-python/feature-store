@@ -1,0 +1,50 @@
+2026-02-06 12:13:49,878 - INFO - Starting Kafka consumer
+2026-02-06 12:13:49,892 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2026-02-06 12:13:49,898 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2026-02-06 12:13:49,898 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2026-02-06 12:13:49,898 - WARNING - group_id is None: disabling auto-commit.
+2026-02-06 12:13:49,898 - INFO - Updating subscribed topics to: ('user_events',)
+2026-02-06 12:13:49,907 - INFO - Updated partition assignment: [TopicPartition(topic='user_events', partition=0)]
+2026-02-06 12:13:49,909 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2026-02-06 12:13:49,909 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2026-02-06 12:13:49,909 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2026-02-06 12:13:49,931 - INFO - Resetting offset for partition TopicPartition(topic='user_events', partition=0) to offset 0.
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': 'f7d5bfa1-6ce8-4169-a821-1f8dc0e80d88', 'user_id': 'user_7', 'event_type': 'purchase', 'event_value': 14.47, 'event_ts': '2026-02-06T06:43:16.902104', 'ingest_ts': '2026-02-06T06:43:16.902104'}
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': 'f07b9bea-71be-48d1-9c3b-8a43d613fd3b', 'user_id': 'user_2', 'event_type': 'view', 'event_value': 473.97, 'event_ts': '2026-02-06T06:43:18.064401', 'ingest_ts': '2026-02-06T06:43:18.064401'}
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': 'e3fa0a0e-e3da-415f-bf46-62c4644c9820', 'user_id': 'user_10', 'event_type': 'purchase', 'event_value': 493.1, 'event_ts': '2026-02-06T06:43:19.073183', 'ingest_ts': '2026-02-06T06:43:19.073183'}
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': '57e7b884-af36-46e0-99b0-ecf3e2a22e83', 'user_id': 'user_10', 'event_type': 'view', 'event_value': 59.65, 'event_ts': '2026-02-06T06:43:20.078664', 'ingest_ts': '2026-02-06T06:43:20.079100'}
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': 'ae815254-0918-4787-ae51-e0ff2d05d0ca', 'user_id': 'user_10', 'event_type': 'click', 'event_value': 324.64, 'event_ts': '2026-02-06T06:43:21.085596', 'ingest_ts': '2026-02-06T06:43:21.085596'}
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': '003c5139-71ab-4d93-80b9-d601d3f1f41e', 'user_id': 'user_9', 'event_type': 'view', 'event_value': 213.41, 'event_ts': '2026-02-06T06:43:22.092694', 'ingest_ts': '2026-02-06T06:43:22.092694'}
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': 'bc02d9ad-3e48-4d3f-88c6-0dffdf879dcd', 'user_id': 'user_1', 'event_type': 'click', 'event_value': 121.78, 'event_ts': '2026-02-06T06:43:23.097930', 'ingest_ts': '2026-02-06T06:43:23.097930'}
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': '6bed78bf-37a5-4b80-a6f8-ad4986d0641c', 'user_id': 'user_8', 'event_type': 'purchase', 'event_value': 185.61, 'event_ts': '2026-02-06T06:43:24.104946', 'ingest_ts': '2026-02-06T06:43:24.104946'}
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': 'f2aba810-974f-4c8c-a834-00af9a5858c3', 'user_id': 'user_7', 'event_type': 'view', 'event_value': 193.54, 'event_ts': '2026-02-06T06:43:25.112567', 'ingest_ts': '2026-02-06T06:43:25.112567'}
+2026-02-06 12:13:49,994 - WARNING - Dropped invalid event: {'event_id': '1789f55f-58b2-40d8-a659-bbf5a6469e2d', 'user_id': 'user_3', 'event_type': 'view', 'event_value': 153.05, 'event_ts': '2026-02-06T06:43:26.117721', 'ingest_ts': '2026-02-06T06:43:26.117721'}
+2026-02-06 12:13:54,995 - INFO - No valid events consumed
+2026-02-06 12:13:54,996 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2026-02-06 12:13:54,996 - INFO - Fetch to node 1 failed: Cancelled: <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>
+2026-02-06 12:13:54,996 - INFO - Kafka consumer stopped
+2026-02-06 12:14:34,011 - INFO - Starting Kafka consumer
+2026-02-06 12:14:34,016 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2026-02-06 12:14:34,026 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2026-02-06 12:14:34,026 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2026-02-06 12:14:34,026 - WARNING - group_id is None: disabling auto-commit.
+2026-02-06 12:14:34,026 - INFO - Updating subscribed topics to: ('user_events',)
+2026-02-06 12:14:34,026 - INFO - Updated partition assignment: [TopicPartition(topic='user_events', partition=0)]
+2026-02-06 12:14:34,026 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2026-02-06 12:14:34,026 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2026-02-06 12:14:34,026 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2026-02-06 12:14:34,037 - INFO - Resetting offset for partition TopicPartition(topic='user_events', partition=0) to offset 0.
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': 'f7d5bfa1-6ce8-4169-a821-1f8dc0e80d88', 'user_id': 'user_7', 'event_type': 'purchase', 'event_value': 14.47, 'event_ts': '2026-02-06T06:43:16.902104', 'ingest_ts': '2026-02-06T06:43:16.902104'}
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': 'f07b9bea-71be-48d1-9c3b-8a43d613fd3b', 'user_id': 'user_2', 'event_type': 'view', 'event_value': 473.97, 'event_ts': '2026-02-06T06:43:18.064401', 'ingest_ts': '2026-02-06T06:43:18.064401'}
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': 'e3fa0a0e-e3da-415f-bf46-62c4644c9820', 'user_id': 'user_10', 'event_type': 'purchase', 'event_value': 493.1, 'event_ts': '2026-02-06T06:43:19.073183', 'ingest_ts': '2026-02-06T06:43:19.073183'}
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': '57e7b884-af36-46e0-99b0-ecf3e2a22e83', 'user_id': 'user_10', 'event_type': 'view', 'event_value': 59.65, 'event_ts': '2026-02-06T06:43:20.078664', 'ingest_ts': '2026-02-06T06:43:20.079100'}
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': 'ae815254-0918-4787-ae51-e0ff2d05d0ca', 'user_id': 'user_10', 'event_type': 'click', 'event_value': 324.64, 'event_ts': '2026-02-06T06:43:21.085596', 'ingest_ts': '2026-02-06T06:43:21.085596'}
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': '003c5139-71ab-4d93-80b9-d601d3f1f41e', 'user_id': 'user_9', 'event_type': 'view', 'event_value': 213.41, 'event_ts': '2026-02-06T06:43:22.092694', 'ingest_ts': '2026-02-06T06:43:22.092694'}
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': 'bc02d9ad-3e48-4d3f-88c6-0dffdf879dcd', 'user_id': 'user_1', 'event_type': 'click', 'event_value': 121.78, 'event_ts': '2026-02-06T06:43:23.097930', 'ingest_ts': '2026-02-06T06:43:23.097930'}
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': '6bed78bf-37a5-4b80-a6f8-ad4986d0641c', 'user_id': 'user_8', 'event_type': 'purchase', 'event_value': 185.61, 'event_ts': '2026-02-06T06:43:24.104946', 'ingest_ts': '2026-02-06T06:43:24.104946'}
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': 'f2aba810-974f-4c8c-a834-00af9a5858c3', 'user_id': 'user_7', 'event_type': 'view', 'event_value': 193.54, 'event_ts': '2026-02-06T06:43:25.112567', 'ingest_ts': '2026-02-06T06:43:25.112567'}
+2026-02-06 12:14:34,043 - WARNING - Dropped invalid event: {'event_id': '1789f55f-58b2-40d8-a659-bbf5a6469e2d', 'user_id': 'user_3', 'event_type': 'view', 'event_value': 153.05, 'event_ts': '2026-02-06T06:43:26.117721', 'ingest_ts': '2026-02-06T06:43:26.117721'}
+2026-02-06 12:14:39,052 - INFO - No valid events consumed
+2026-02-06 12:14:39,053 - INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2026-02-06 12:14:39,053 - INFO - Fetch to node 1 failed: Cancelled: <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>
+2026-02-06 12:14:39,053 - INFO - Kafka consumer stopped
