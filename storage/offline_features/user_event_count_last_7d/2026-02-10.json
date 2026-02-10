@@ -1,0 +1,12 @@
+{
+  "feature_name": "user_event_count_last_7d",
+  "feature_date": "2026-02-10",
+  "computed_at": "2026-02-10T14:47:39.668189",
+  "values": {
+    "user_5": 8,
+    "user_4": 10,
+    "user_1": 11,
+    "user_2": 7,
+    "user_3": 17
+  }
+}

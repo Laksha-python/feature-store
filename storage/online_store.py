@@ -1,37 +1,29 @@
-import csv
+import json
+from pathlib import Path
 import os
 
 
 def write_online_features(
     storage_dir,
-    users,
-    event_counts_7d,
-    purchase_counts_30d,
-    avg_purchase_value_30d,
-    computed_at
+    feature_name,
+    feature_values,
+    reference_time
 ):
-    base_path = os.path.join(storage_dir, "online_store")
-    os.makedirs(base_path, exist_ok=True)
+    online_dir = Path(storage_dir) / "online_store"
+    online_dir.mkdir(parents=True, exist_ok=True)
 
-    file_path = os.path.join(base_path, "user_features.csv")
+    tmp_file = online_dir / f".{feature_name}.tmp"
+    final_file = online_dir / f"{feature_name}.json"
 
-    with open(file_path, mode="w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow([
-            "user_id",
-            "event_count_last_7d",
-            "purchase_count_last_30d",
-            "avg_purchase_value_last_30d",
-            "computed_at"
-        ])
+    payload = {
+        "feature_name": feature_name,
+        "updated_at": reference_time.isoformat(),
+        "values": feature_values
+    }
 
-        for user_id in sorted(users):
-            avg_val = avg_purchase_value_30d.get(user_id)
+    with open(tmp_file, "w") as f:
+        json.dump(payload, f, indent=2)
 
-            writer.writerow([
-                user_id,
-                event_counts_7d.get(user_id, 0),
-                purchase_counts_30d.get(user_id, 0),
-                round(avg_val, 2) if avg_val is not None else 0,
-                computed_at.isoformat()
-            ])
+    os.replace(tmp_file, final_file)  
+
+    print(f"Online store updated atomically: {final_file}")

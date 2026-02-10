@@ -1,21 +1,31 @@
-import csv
-import os
+import json
+from pathlib import Path
+from datetime import datetime
 
 
-def write_offline_feature(storage_dir, feature_name, feature_values, feature_date):
-    base_path = os.path.join(
-        storage_dir,
-        "offline_features",
-        feature_name,
-        f"date={feature_date}"
-    )
-    os.makedirs(base_path, exist_ok=True)
+def write_offline_feature(
+    storage_dir,
+    feature_name,
+    feature_values,
+    feature_date
+):
+    base_dir = Path(storage_dir) / "offline_features" / feature_name
+    base_dir.mkdir(parents=True, exist_ok=True)
 
-    file_path = os.path.join(base_path, "data.csv")
+    output_file = base_dir / f"{feature_date}.json"
 
-    with open(file_path, mode="w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(["user_id", "feature_value", "feature_date"])
+    if output_file.exists():
+        print(f"Offline feature already exists: {output_file}")
+        return  
 
-        for user_id, value in feature_values.items():
-            writer.writerow([user_id, value, feature_date])
+    payload = {
+        "feature_name": feature_name,
+        "feature_date": feature_date,
+        "computed_at": datetime.now().isoformat(),
+        "values": feature_values
+    }
+
+    with open(output_file, "w") as f:
+        json.dump(payload, f, indent=2)
+
+    print(f"Offline feature written: {output_file}")

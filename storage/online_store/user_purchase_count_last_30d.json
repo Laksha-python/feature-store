@@ -1,0 +1,11 @@
+{
+  "feature_name": "user_purchase_count_last_30d",
+  "updated_at": "2026-02-10T10:39:17.938709+00:00",
+  "values": {
+    "user_5": 3.0,
+    "user_4": 7.0,
+    "user_1": 4.0,
+    "user_2": 6.0,
+    "user_3": 13.0
+  }
+}
