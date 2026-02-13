@@ -6,7 +6,7 @@ from kafka import KafkaConsumer
 
 
 TOPIC = "user_events"
-BOOTSTRAP_SERVERS = ["localhost:9092"]
+BOOTSTRAP_SERVERS = ["kafka:9092"]
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW_DIR = os.path.join(BASE_DIR, "storage", "raw_events")

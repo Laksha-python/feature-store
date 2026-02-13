@@ -2,11 +2,16 @@ from pathlib import Path
 import json
 import csv
 from datetime import datetime, timedelta
+import sys
 
 
 def load_freshness(storage_dir):
     freshness_file = Path(storage_dir) / "freshness" / "feature_freshness.csv"
+
     freshness = {}
+    if not freshness_file.exists():
+        print("Freshness file missing.")
+        sys.exit(1)
 
     with open(freshness_file, "r") as f:
         reader = csv.DictReader(f)
@@ -21,6 +26,10 @@ def validate_online_features(storage_dir):
     freshness = load_freshness(storage_dir)
 
     issues = []
+
+    if not online_dir.exists():
+        print("Online store directory missing.")
+        sys.exit(1)
 
     for feature_file in online_dir.glob("*.json"):
         with open(feature_file, "r") as f:
@@ -41,14 +50,15 @@ def validate_online_features(storage_dir):
             issues.append(f"{name}: STALE")
 
     if issues:
-        print(" FEATURE VALIDATION FAILED")
+        print("FEATURE VALIDATION FAILED")
         for issue in issues:
-            print(" -", issue)
-        return False
-
-    print(" ALL FEATURES ARE FRESH AND VALID")
-    return True
+            print("-", issue)
+        sys.exit(1)  
+    else:
+        print("ALL FEATURES ARE FRESH AND VALID")
+        sys.exit(0)
 
 
 if __name__ == "__main__":
     validate_online_features("storage")
+

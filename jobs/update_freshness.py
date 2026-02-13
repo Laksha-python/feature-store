@@ -1,24 +1,44 @@
+from pathlib import Path
+import csv
 from datetime import datetime
-from storage.freshness_store import write_feature_freshness
 
+STORAGE_DIR = "storage"
+FRESHNESS_DIR = Path(STORAGE_DIR) / "freshness"
+FRESHNESS_DIR.mkdir(parents=True, exist_ok=True)
 
-def main():
-    storage_dir = "storage"
+FRESHNESS_FILE = FRESHNESS_DIR / "feature_freshness.csv"
 
-    feature_names = [
-        "user_event_count_last_7d",
-        "user_purchase_count_last_30d",
-        "user_avg_purchase_value_last_30d"
-    ]
+FEATURES = [
+    "user_event_count_last_7d",
+    "user_purchase_count_last_30d",
+    "user_avg_purchase_value_last_30d",
+]
 
-    write_feature_freshness(
-        storage_dir=storage_dir,
-        feature_names=feature_names,
-        last_updated_at=datetime.now()
-    )
+def update():
+    now = datetime.now().isoformat()
 
-    print("Feature freshness updated successfully")
+    with open(FRESHNESS_FILE, "w", newline="") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=[
+                "feature_name",
+                "last_updated_at",
+                "expected_frequency_hours"
+            ]
+        )
+
+        writer.writeheader()
+
+        for feature in FEATURES:
+            writer.writerow({
+                "feature_name": feature,
+                "last_updated_at": now,
+                "expected_frequency_hours": 24
+            })
+
+    print("Freshness metadata updated.")
 
 
 if __name__ == "__main__":
-    main()
+    update()
+

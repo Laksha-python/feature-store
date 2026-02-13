@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+
+logs/
+airflow_orchestration/logs/
+
+
+storage/raw_events/
+storage/offline_features/
+storage/online_store/
+storage/freshness/*.csv
+storage/freshness/*.json
+
+
+.DS_Store
+Thumbs.db

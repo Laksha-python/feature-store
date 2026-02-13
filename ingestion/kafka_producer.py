@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from kafka import KafkaProducer
 
 TOPIC = "user_events"
-BOOTSTRAP_SERVERS = ["localhost:9092"]
+BOOTSTRAP_SERVERS = ["kafka:9092"]
 
 USERS = [f"user_{i}" for i in range(1, 6)]
 ACTIONS = ["view", "click", "purchase"]
