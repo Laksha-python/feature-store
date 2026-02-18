@@ -14,10 +14,6 @@ def write_offline_feature(
 
     output_file = base_dir / f"{feature_date}.json"
 
-    if output_file.exists():
-        print(f"Offline feature already exists: {output_file}")
-        return  
-
     payload = {
         "feature_name": feature_name,
         "feature_date": feature_date,

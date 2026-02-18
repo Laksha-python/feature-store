@@ -1,114 +1,149 @@
 import sys
 from pathlib import Path
-from datetime import datetime, timedelta
+
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, avg
+from pyspark.sql.functions import (
+    when,
+    window,
+    col,
+    sum as spark_sum
+)
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
 
-from storage.offline_store import write_offline_feature
-
 
 def main():
+
     spark = (
-    SparkSession.builder
-    .appName("FeatureComputation")
-    .master("local[*]")
-    .config("spark.sql.warehouse.dir", "/tmp/spark-warehouse")
-    .getOrCreate()
-)
+        SparkSession.builder
+        .appName("Phase4_EventTimeStreaming")
+        .master("local[*]")
+        .config("spark.sql.shuffle.partitions", "2")
+        .config("spark.sql.warehouse.dir", "file:///tmp/spark-warehouse")
+        .getOrCreate()
+    )
 
     spark.sparkContext.setLogLevel("WARN")
 
     base_dir = Path(__file__).resolve().parents[1]
-    storage_dir = base_dir / "storage"
-    raw_dir = storage_dir / "raw_events"
+    raw_path = str(base_dir / "storage" / "raw_events")
 
-    raw_files = sorted(raw_dir.glob("events_*.csv"))
-    if not raw_files:
-        print("No raw event files found")
-        spark.stop()
-        return
+    print("Reading streaming events from:", raw_path)
 
-    latest_file = str(raw_files[-1])
-    print(f"Reading raw events from {latest_file}")
+    schema = """
+        event_id STRING,
+        event_type STRING,
+        user_id STRING,
+        product_id STRING,
+        order_id STRING,
+        price INT,
+        event_time TIMESTAMP,
+        processing_time TIMESTAMP
+    """
 
-    df = spark.read.csv(
-        latest_file,
-        header=True,
-        inferSchema=True
+    df = (
+        spark.readStream
+        .schema(schema)
+        .option("header", True)
+        .csv(raw_path)
     )
 
-    reference_time = datetime.now()
-    feature_date = reference_time.strftime("%Y-%m-%d")
-
-    seven_days_ago = reference_time - timedelta(days=7)
-
-    event_count_df = (
-        df.filter(col("event_timestamp") >= seven_days_ago)
-          .groupBy("user_id")
-          .count()
-          .withColumnRenamed("count", "event_count_last_7d")
+    events = (
+        df
+        .filter(col("price").isNotNull())
+        .withWatermark("event_time", "10 minutes")
+        .dropDuplicates(["order_id", "event_type"])
     )
 
-    event_counts_7d = {
-        row["user_id"]: row["event_count_last_7d"]
-        for row in event_count_df.collect()
-    }
-
-    write_offline_feature(
-        str(storage_dir),
-        "user_event_count_last_7d",
-        event_counts_7d,
-        feature_date
-    )
-
-    thirty_days_ago = reference_time - timedelta(days=30)
-
-    purchase_count_df = (
-        df.filter(
-            (col("action_type") == "purchase") &
-            (col("event_timestamp") >= thirty_days_ago)
+    sales_1h = (
+        events
+        .filter(col("event_type") == "purchase")
+        .groupBy(
+            window(col("event_time"), "1 hour"),
+            col("product_id")
         )
-        .groupBy("user_id")
         .count()
-        .withColumnRenamed("count", "purchase_count_last_30d")
     )
-
-    purchase_counts_30d = {
-        row["user_id"]: row["purchase_count_last_30d"]
-        for row in purchase_count_df.collect()
-    }
-
-    write_offline_feature(
-        str(storage_dir),
-        "user_purchase_count_last_30d",
-        purchase_counts_30d,
-        feature_date
-    )
-    avg_purchase_df = (
-        df.filter(
-            (col("action_type") == "purchase") &
-            (col("event_timestamp") >= thirty_days_ago)
+    purchase_count = (
+        events
+        .filter(col("event_type") == "purchase")
+        .groupBy(
+            window(col("event_time"), "30 minutes"),
+            col("user_id")
         )
-        .groupBy("user_id")
-        .agg(avg("action_value").alias("avg_purchase_value_last_30d"))
+        .count()
     )
 
-    avg_purchase_values_30d = {
-        row["user_id"]: round(row["avg_purchase_value_last_30d"], 2)
-        for row in avg_purchase_df.collect()
-    }
-
-    write_offline_feature(
-        str(storage_dir),
-        "user_avg_purchase_value_last_30d",
-        avg_purchase_values_30d,
-        feature_date
+    spend_window = (
+        events
+        .filter(col("event_type") == "purchase")
+        .groupBy(
+            window(col("event_time"), "30 minutes"),
+            col("user_id")
+        )
+        .agg(spark_sum("price").alias("rolling_spend"))
+    )
+    revenue_df = events.withColumn(
+        "revenue_delta",
+        when(col("event_type") == "purchase", col("price"))
+        .when(col("event_type") == "refund", -col("price"))
+        .when(col("event_type") == "cancel", -col("price"))
+        .otherwise(0)
     )
 
-    print("All Spark features computed and written successfully")
-    spark.stop()
+    net_revenue_df = (
+        revenue_df
+        .groupBy(
+            window(col("event_time"), "1 hour"),
+            col("user_id")
+        )
+        .agg(
+            spark_sum("revenue_delta").alias("net_revenue")
+        )
+    )
+    def write_batch(batch_df, batch_id):
+        rows = batch_df.collect()
+        print(f"\n=== Batch {batch_id} ===")
+        print("Rows:", len(rows))
+
+        for r in rows[:5]:
+            print(r)
+
+    q1 = (
+        sales_1h.writeStream
+        .outputMode("update")
+        .option("checkpointLocation", "/tmp/checkpoints/sales_1h")
+        .foreachBatch(write_batch)
+        .start()
+    )
+
+    q2 = (
+        purchase_count.writeStream
+        .outputMode("update")
+        .option("checkpointLocation", "/tmp/checkpoints/purchase_count")
+        .foreachBatch(write_batch)
+        .start()
+    )
+
+    q3 = (
+        spend_window.writeStream
+        .outputMode("update")
+        .option("checkpointLocation", "/tmp/checkpoints/spend_window")
+        .foreachBatch(write_batch)
+        .start()
+    )
+
+    q4 = (
+        net_revenue_df.writeStream
+        .outputMode("update")
+        .option("checkpointLocation", "/tmp/checkpoints/net_revenue")
+        .foreachBatch(write_batch)
+        .start()
+    )
+
+
+    spark.streams.awaitAnyTermination()
 
 
 if __name__ == "__main__":

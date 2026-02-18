@@ -1,17 +1,20 @@
+
 __pycache__/
 *.pyc
-*.pyo
 
-logs/
-airflow_orchestration/logs/
-
+venv/
+venv_win/
 
 storage/raw_events/
 storage/offline_features/
 storage/online_store/
-storage/freshness/*.csv
-storage/freshness/*.json
+storage/freshness/
+storage/state/
+storage/processed_ids.json
 
+logs/
+airflow_orchestration/logs/
 
-.DS_Store
-Thumbs.db
+airflow_orchestration/.env
+
+.streamlit/

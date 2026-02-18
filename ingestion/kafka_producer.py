@@ -1,49 +1,40 @@
 import json
-import random
 import time
-from datetime import datetime, timedelta
+import uuid
+import random
+from datetime import datetime
+
 from kafka import KafkaProducer
 
-TOPIC = "user_events"
-BOOTSTRAP_SERVERS = ["kafka:9092"]
+TOPIC = "events"
 
-USERS = [f"user_{i}" for i in range(1, 6)]
-ACTIONS = ["view", "click", "purchase"]
+producer = KafkaProducer(
+    bootstrap_servers="localhost:9092",
+    value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+)
 
+EVENT_TYPES = ["view", "purchase", "refund"]
 
-def create_producer():
-    return KafkaProducer(
-        bootstrap_servers=BOOTSTRAP_SERVERS,
-        value_serializer=lambda v: json.dumps(v).encode("utf-8")
-    )
+print("🚀 Producer started...")
 
+while True:
 
-def generate_event():
-    action_type = random.choice(ACTIONS)
+    event_type = random.choice(EVENT_TYPES)
 
-    return {
-        "user_id": random.choice(USERS),
-        "action_type": action_type,
-        "action_value": random.randint(100, 2000) if action_type == "purchase" else 1,
-        "event_timestamp": (
-            datetime.now() - timedelta(days=random.randint(0, 30))
-        ).isoformat()
+    event = {
+        "event_id": str(uuid.uuid4()),
+        "event_type": event_type,
+        "user_id": f"user_{random.randint(1,10)}",
+        "product_id": f"product_{random.randint(1,5)}",
+        "order_id": str(uuid.uuid4()),
+        "price": random.randint(100, 1000),
+        "event_time": datetime.now().isoformat(),
+        "processing_time": datetime.now().isoformat(),
     }
 
-
-def main():
-    producer = create_producer()
-
-    for _ in range(50):
-        event = generate_event()
-        producer.send(TOPIC, event)
-        print(f"Produced: {event}")
-        time.sleep(0.1)
-
+    producer.send(TOPIC, value=event)
     producer.flush()
-    producer.close()
-    print("Producer finished.")
 
+    print("📤 Sent:", event)
 
-if __name__ == "__main__":
-    main()
+    time.sleep(1)

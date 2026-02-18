@@ -1,29 +1,38 @@
 import json
 from pathlib import Path
-import os
 
 
 def write_online_features(
     storage_dir,
-    feature_name,
-    feature_values,
+    entities,
+    user_features,
+    product_features,
+    net_revenue_features,
     reference_time
 ):
+
     online_dir = Path(storage_dir) / "online_store"
     online_dir.mkdir(parents=True, exist_ok=True)
 
-    tmp_file = online_dir / f".{feature_name}.tmp"
-    final_file = online_dir / f"{feature_name}.json"
+    output_file = online_dir / "online_features.json"
 
-    payload = {
-        "feature_name": feature_name,
-        "updated_at": reference_time.isoformat(),
-        "values": feature_values
-    }
+    data = {}
 
-    with open(tmp_file, "w") as f:
-        json.dump(payload, f, indent=2)
+    for e in entities:
+        data[str(e)] = {}
 
-    os.replace(tmp_file, final_file)  
+        for fname, fmap in user_features.items():
+            if e in fmap:
+                data[str(e)][fname] = fmap[e]
 
-    print(f"Online store updated atomically: {final_file}")
+        for fname, fmap in product_features.items():
+            if e in fmap:
+                data[str(e)][fname] = fmap[e]
+
+        if e in net_revenue_features:
+            data[str(e)]["net_revenue"] = net_revenue_features[e]
+
+    with open(output_file, "w") as f:
+        json.dump(data, f, indent=2)
+
+    print("Online store updated:", output_file)
