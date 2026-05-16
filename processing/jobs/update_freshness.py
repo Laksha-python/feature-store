@@ -17,7 +17,7 @@ FEATURES = [
 def update():
     now = datetime.now().isoformat()
 
-    with open(FRESHNESS_FILE, "w", newline="") as f:
+    with open(FRESHNESS_FILE, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
             f,
             fieldnames=[

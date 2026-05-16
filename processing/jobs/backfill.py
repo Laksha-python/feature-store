@@ -1,0 +1,198 @@
+# -*- coding: utf-8 -*-
+import sys
+from pathlib import Path
+from datetime import datetime
+import json
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.append(str(PROJECT_ROOT))
+
+from processing.feature_logic import (
+    compute_user_features,
+    compute_product_features,
+    compute_net_revenue_features
+)
+
+# ❌ REMOVE THIS (old JSON offline)
+# from storage.offline_store import write_offline_feature
+
+from storage.online_store import write_online_snapshot
+
+# ✅ ADD POSTGRES
+from storage.postgres_store import (
+    write_user_features,
+    write_product_features
+)
+
+from api.utils.redis_client import redis_set
+
+
+STORAGE_DIR = PROJECT_ROOT / "storage"
+RAW_EVENTS_FILE = STORAGE_DIR / "raw_events" / "events.json"
+DLQ_FILE = STORAGE_DIR / "dlq" / "dlq.json"
+
+
+# ---------------------------
+# LOAD EVENTS
+# ---------------------------
+def load_events():
+    if not RAW_EVENTS_FILE.exists():
+        print("No raw events found")
+        return []
+
+    with open(RAW_EVENTS_FILE, "r") as f:
+        return json.load(f)
+
+
+# ---------------------------
+# METRICS COMPUTATION
+# ---------------------------
+def compute_metrics(events):
+
+    seen_ids = set()
+    duplicates = 0
+    valid_events = []
+
+    for event in events:
+        eid = event.get("event_id")
+
+        if eid in seen_ids:
+            duplicates += 1
+            continue
+
+        seen_ids.add(eid)
+        valid_events.append(event)
+
+    total_events = len(events)
+
+    # DLQ
+    if DLQ_FILE.exists():
+        try:
+            with open(DLQ_FILE) as f:
+                dlq_events = json.load(f)
+                dlq_count = len(dlq_events)
+        except:
+            dlq_count = 0
+    else:
+        dlq_count = 0
+
+    return {
+        "total_events": total_events,
+        "duplicates": duplicates,
+        "dlq": dlq_count
+    }, valid_events
+
+
+# ---------------------------
+# MAIN BACKFILL
+# ---------------------------
+def main():
+
+    print("Starting FULL BACKFILL")
+
+    events = load_events()
+
+    if not events:
+        print("No raw events found")
+        return
+
+    reference_time = datetime.now()
+    feature_date = reference_time.date()
+
+    # ---------------------------
+    # METRICS
+    # ---------------------------
+    metrics, clean_events = compute_metrics(events)
+
+    print(f"Events: {metrics['total_events']}")
+    print(f"Duplicates: {metrics['duplicates']}")
+    print(f"DLQ: {metrics['dlq']}")
+
+    # ---------------------------
+    # FEATURES
+    # ---------------------------
+    user_features = compute_user_features(clean_events, reference_time)
+    product_features = compute_product_features(clean_events, reference_time)
+    net_revenue_features = compute_net_revenue_features(clean_events, reference_time)
+
+    # ---------------------------
+    # ✅ WRITE TO POSTGRES (FIXED)
+    # ---------------------------
+    print("Writing user features to Postgres...")
+    
+    for feature_name, feature_map in user_features.items():
+        write_user_features(feature_name, feature_map, feature_date)
+    
+    print("Writing product features to Postgres...")
+    
+    for feature_name, feature_map in product_features.items():
+        write_product_features(feature_name, feature_map, feature_date)
+
+    write_user_features(
+        "net_revenue_30d",
+        net_revenue_features,
+        feature_date
+    )
+    
+    print("Postgres write complete")
+
+    # ---------------------------
+    # BUILD SNAPSHOT
+    # ---------------------------
+    snapshot = {
+        "users": {},
+        "products": {},
+        "system": {}
+    }
+
+    # USERS
+    for feature_name, feature_map in user_features.items():
+        for user_id, value in feature_map.items():
+            snapshot["users"].setdefault(user_id, {})
+            snapshot["users"][user_id][feature_name] = value
+
+    # PRODUCTS
+    for feature_name, feature_map in product_features.items():
+        for product_id, value in feature_map.items():
+            snapshot["products"].setdefault(product_id, {})
+            snapshot["products"][product_id][feature_name] = value
+
+    # NET REVENUE
+    for user_id, value in net_revenue_features.items():
+        snapshot["users"].setdefault(user_id, {})
+        snapshot["users"][user_id]["net_revenue_30d"] = value
+
+    # ---------------------------
+    # SYSTEM METRICS
+    # ---------------------------
+    snapshot["system"] = {
+        "events_processed_count": metrics["total_events"],
+        "duplicate_event_count": metrics["duplicates"],
+        "dlq_count": metrics["dlq"],
+        "watermark_age_seconds": 0,
+        "last_computed": datetime.now().isoformat()
+    }
+
+    # ---------------------------
+    # ONLINE STORE
+    # ---------------------------
+    write_online_snapshot(STORAGE_DIR, snapshot)
+
+    # ---------------------------
+    # REDIS
+    # ---------------------------
+    print("Syncing to Redis...")
+
+    for user_id, features in snapshot["users"].items():
+        redis_set(f"user:{user_id}", features, ttl=300)
+
+    for product_id, features in snapshot["products"].items():
+        redis_set(f"product:{product_id}", features, ttl=300)
+
+    print("Redis sync complete")
+    print("BACKFILL COMPLETE")
+
+
+# ---------------------------
+if __name__ == "__main__":
+    main()

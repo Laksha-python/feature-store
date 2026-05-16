@@ -1,0 +1,103 @@
+{
+  "users": {
+    "user_5": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 3671.0,
+      "recency_days": 29,
+      "net_revenue_30d": 3229.0
+    },
+    "user_10": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 4164.0,
+      "recency_days": 29,
+      "net_revenue_30d": 126.0
+    },
+    "user_3": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 1979.0,
+      "recency_days": 29,
+      "net_revenue_30d": 272.0
+    },
+    "user_4": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 982.0,
+      "recency_days": 29,
+      "net_revenue_30d": -2035.0
+    },
+    "user_8": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 4309.0,
+      "recency_days": 29,
+      "net_revenue_30d": -1842.0
+    },
+    "user_1": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 2227.0,
+      "recency_days": 29,
+      "net_revenue_30d": 1503.0
+    },
+    "user_7": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 1403.0,
+      "recency_days": 29,
+      "net_revenue_30d": 662.0
+    },
+    "user_2": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 2447.0,
+      "recency_days": 29,
+      "net_revenue_30d": 167.0
+    },
+    "user_9": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 2468.0,
+      "recency_days": 29,
+      "net_revenue_30d": 678.0
+    },
+    "user_6": {
+      "rolling_7d_purchase_count": 0,
+      "rolling_30d_spend": 3494.0,
+      "recency_days": 29,
+      "net_revenue_30d": 1380.0
+    }
+  },
+  "products": {
+    "product_2": {
+      "rolling_1h_sales": 0,
+      "rolling_24h_sales": 0,
+      "conversion_rate": 2.25,
+      "refund_rate": 0.2777777777777778
+    },
+    "product_3": {
+      "rolling_1h_sales": 0,
+      "rolling_24h_sales": 0,
+      "conversion_rate": 1.75,
+      "refund_rate": 1.8571428571428572
+    },
+    "product_5": {
+      "rolling_1h_sales": 0,
+      "rolling_24h_sales": 0,
+      "conversion_rate": 0.2727272727272727,
+      "refund_rate": 3.0
+    },
+    "product_1": {
+      "rolling_1h_sales": 0,
+      "rolling_24h_sales": 0,
+      "conversion_rate": 0.875,
+      "refund_rate": 0.8571428571428571
+    },
+    "product_4": {
+      "rolling_1h_sales": 0,
+      "rolling_24h_sales": 0,
+      "conversion_rate": 1.4444444444444444,
+      "refund_rate": 1.0
+    }
+  },
+  "system": {
+    "events_processed_count": 134,
+    "duplicate_event_count": 0,
+    "dlq_count": 0,
+    "watermark_age_seconds": 0,
+    "last_computed": "2026-05-16T18:34:28.404744"
+  }
+}

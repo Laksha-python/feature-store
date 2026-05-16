@@ -1,0 +1,13 @@
+{
+  "raw_event": [
+    "rolling_7d_purchase_count",
+    "rolling_30d_spend",
+    "recency_days",
+    "rolling_1h_sales",
+    "rolling_24h_sales",
+    "conversion_rate",
+    "refund_rate",
+    "net_revenue_30d",
+    "error_rate_last_10min"
+  ]
+}

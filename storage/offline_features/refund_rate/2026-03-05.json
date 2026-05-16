@@ -1,0 +1,12 @@
+{
+  "feature_name": "refund_rate",
+  "feature_date": "2026-03-05",
+  "computed_at": "2026-03-05T10:00:15.419727",
+  "values": {
+    "product_3": 1.0,
+    "product_1": 2.5,
+    "product_2": 0.9090909090909091,
+    "product_4": 1.7142857142857142,
+    "product_5": 1.0
+  }
+}

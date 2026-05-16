@@ -30,6 +30,11 @@ services:
       - .:/app
     ports:
       - "4040:4040"
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
 networks:
   default:
     external: true

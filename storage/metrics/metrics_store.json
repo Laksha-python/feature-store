@@ -1,0 +1,12 @@
+{
+  "duplicate_event_count": 181307,
+  "late_event_count": 4425,
+  "dlq_count": 3899,
+  "events_processed_count": 7836,
+  "watermark_age_seconds": 45.0,
+  "kafka_lag": 0,
+  "nominal_balance": "7,500.00",
+  "total_stock": "3,142",
+  "nominal_revenue": "21,430.00",
+  "nominal_expense": "12,980.00"
+}

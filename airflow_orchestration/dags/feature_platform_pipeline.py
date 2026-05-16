@@ -9,6 +9,11 @@ with DAG(
     catchup=False,
 ) as dag:
 
+    backfill = BashOperator(
+        task_id="backfill_features",
+        bash_command="cd /opt/feature_project && python processing/jobs/backfill.py",
+    )
+
     run_producer = BashOperator(
         task_id="run_kafka_producer",
         bash_command="cd /opt/feature_project && python -m ingestion.kafka_producer",
@@ -39,4 +44,4 @@ with DAG(
         bash_command="cd /opt/feature_project && python -m jobs.validate_online_features",
     )
 
-    run_producer >> run_consumer >> run_spark >> sync_online >> update_freshness >> validate
+    backfill >> run_producer >> run_consumer >> run_spark >> sync_online >> update_freshness >> validate

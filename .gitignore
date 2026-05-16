@@ -22,3 +22,8 @@ Thumbs.db
 *.log
 
 .streamlit/secrets.toml
+
+.ipynb_checkpoints/
+
+airflow_orchestration/logs/
+airflow_orchestration/airflow.db

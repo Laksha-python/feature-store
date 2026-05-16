@@ -1,0 +1,8 @@
+{
+  "feature_name": "error_rate_last_10min",
+  "feature_date": "2026-03-02",
+  "computed_at": "2026-03-02T18:04:12.123085",
+  "values": {
+    "system": 0.32
+  }
+}

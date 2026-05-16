@@ -1,8 +1,6 @@
 import csv
 import os
 from datetime import datetime, timedelta
-
-
 def write_feature_freshness(storage_dir, feature_names, last_updated_at):
     base_path = os.path.join(storage_dir, "freshness")
     os.makedirs(base_path, exist_ok=True)
@@ -12,7 +10,7 @@ def write_feature_freshness(storage_dir, feature_names, last_updated_at):
     expected_frequency_hours = 24
     now = datetime.now()
 
-    with open(file_path, mode="w", newline="") as file:
+    with open(file_path, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow([
             "feature_name",
@@ -28,10 +26,16 @@ def write_feature_freshness(storage_dir, feature_names, last_updated_at):
                 if age <= timedelta(hours=expected_frequency_hours)
                 else "stale"
             )
-
             writer.writerow([
                 feature,
                 last_updated_at.isoformat(),
                 expected_frequency_hours,
                 status
             ])
+
+from api.utils.redis_client import redis_set
+from storage import metrics_store 
+
+def update_user_features(user_id, data):
+    metrics_store(user_id, data)
+    set(f"user:{user_id}", data)

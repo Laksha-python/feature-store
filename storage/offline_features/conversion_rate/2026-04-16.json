@@ -1,0 +1,12 @@
+{
+  "feature_name": "conversion_rate",
+  "feature_date": "2026-04-16",
+  "computed_at": "2026-04-16T18:56:59.084628",
+  "values": {
+    "product_2": 3.625,
+    "product_5": 1.0,
+    "product_1": 1.625,
+    "product_3": 4.75,
+    "product_4": 2.2222222222222223
+  }
+}

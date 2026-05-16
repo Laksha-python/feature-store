@@ -1,0 +1,12 @@
+{
+  "feature_name": "rolling_24h_sales",
+  "feature_date": "2026-04-16",
+  "computed_at": "2026-04-16T18:56:59.082375",
+  "values": {
+    "product_2": 18,
+    "product_5": 3,
+    "product_1": 7,
+    "product_3": 7,
+    "product_4": 13
+  }
+}
