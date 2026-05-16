@@ -1,23 +1,24 @@
-
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
 
 venv/
 venv_win/
+env/
 
-storage/raw_events/
-storage/offline_features/
-storage/online_store/
-storage/freshness/
-storage/state/
-storage/processed_ids.json
+node_modules/
 
-logs/
-airflow_orchestration/logs/
+.env
 
-airflow_orchestration/.env
+.DS_Store
+Thumbs.db
 
-.streamlit/
+.vscode/
+.idea/
 
-airflow_orchestration/config/airflow.cfg
-airflow_orchestration/.env
+*.log
+
+.streamlit/secrets.toml
