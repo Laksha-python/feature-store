@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pathlib import Path
 import json
 import csv
@@ -37,6 +38,7 @@ def validate_online_features(storage_dir):
 
         for feature_name, value in payload.items():
 
+            # Skip entity identifiers
             if feature_name in ["user_id", "entity_id"]:
                 continue
 

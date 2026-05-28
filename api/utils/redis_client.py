@@ -7,7 +7,7 @@ r = redis.Redis(
     decode_responses=True
 )
 
-def redis_set(key, value, ttl=300):  # TTL = 5 mins
+def redis_set(key, value, ttl=300):  
     try:
         r.set(key, json.dumps(value), ex=ttl)
     except Exception as e:

@@ -1,6 +1,3 @@
-# One‑step startup for the Feature Project demo
-# Run this from the project root using PowerShell:
-#    .\run_all.ps1
 
 Write-Host "[1/5] Starting Airflow services..."
 docker-compose -f .\airflow_orchestration\docker-compose.yml up -d

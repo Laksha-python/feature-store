@@ -1,5 +1,4 @@
-﻿# coding: utf-8
-import os
+﻿import os
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -12,9 +11,6 @@ API_BASE = os.environ.get("API_BASE", DEFAULT_API_BASE)
 
 st.set_page_config(layout="wide", page_title="Feature Store Control Plane")
 
-# =====================================================
-# 🎨 ENTERPRISE DARK THEME
-# =====================================================
 
 st.markdown("""
 <style>
@@ -147,9 +143,6 @@ html, body, [class*="css"] {
 </style>
 """, unsafe_allow_html=True)
 
-# =====================================================
-# 🔌 API FUNCTIONS
-# =====================================================
 
 def _safe_get(path, default, timeout=5):
     try:
@@ -241,9 +234,6 @@ def format_count(value):
         return "0"
 
 
-# =====================================================
-# 🎛️ STATE MANAGEMENT
-# =====================================================
 
 if "live_mode" not in st.session_state:
     st.session_state.live_mode = False
@@ -254,9 +244,6 @@ if "pipeline_running" not in st.session_state:
 if "last_backfill" not in st.session_state:
     st.session_state.last_backfill = None
 
-# =====================================================
-# 📊 DATA LOADING
-# =====================================================
 
 with st.spinner("Loading control plane data..."):
     health_ok = fetch_health()
@@ -266,7 +253,6 @@ with st.spinner("Loading control plane data..."):
     raw_events = fetch_events()
     feature_catalog = fetch_features()
 
-# Build event DataFrame
 if raw_events and isinstance(raw_events, list):
     df = pd.DataFrame(raw_events)
     if "event_time" in df.columns:
@@ -275,9 +261,6 @@ if raw_events and isinstance(raw_events, list):
 else:
     df = pd.DataFrame()
 
-# =====================================================
-# 🏗️ HEADER
-# =====================================================
 
 st.markdown('<div class="header-bar">', unsafe_allow_html=True)
 col1, col2, col3, col4, col5 = st.columns([3, 1, 1, 1, 1])
@@ -338,9 +321,6 @@ with col5:
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# =====================================================
-# 📈 SYSTEM OVERVIEW
-# =====================================================
 
 st.markdown('<div class="kpi-strip">', unsafe_allow_html=True)
 
@@ -384,9 +364,6 @@ st.markdown(
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# =====================================================
-# 📊 DASHBOARD TABS
-# =====================================================
 
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "👤 User Analytics",
@@ -396,9 +373,6 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "⚙️ Pipeline Control"
 ])
 
-# =====================================================
-# 👤 USER ANALYTICS
-# =====================================================
 
 with tab1:
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
@@ -484,9 +458,6 @@ with tab1:
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# =====================================================
-# 📦 PRODUCT ANALYTICS
-# =====================================================
 
 with tab2:
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
@@ -538,7 +509,7 @@ with tab2:
                         (product_events["event_type"] == "purchase")
                     ]
                     if not recent_sales.empty:
-                        velocity = recent_sales.groupby(pd.Grouper(key="event_time", freq="H")).size().reset_index(name="sales")
+                        velocity = recent_sales.groupby(pd.Grouper(key="event_time", freq="h")).size().reset_index(name="sales")
                         fig = px.line(
                             velocity,
                             x="event_time",
@@ -582,9 +553,6 @@ with tab2:
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# =====================================================
-# 🔄 INTERACTION EXPLORER
-# =====================================================
 
 with tab3:
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
@@ -660,9 +628,6 @@ with tab3:
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# =====================================================
-# 📈 FEATURE MONITORING
-# =====================================================
 
 with tab4:
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
@@ -727,9 +692,6 @@ with tab4:
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# =====================================================
-# ⚙️ PIPELINE CONTROL
-# =====================================================
 
 with tab5:
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
@@ -776,9 +738,6 @@ with tab5:
     )
     st.markdown('</div>', unsafe_allow_html=True)
 
-# =====================================================
-# 🔍 DEBUG PANEL
-# =====================================================
 
 with st.expander("Show Debug Information"):
     st.write({
@@ -791,9 +750,6 @@ with st.expander("Show Debug Information"):
     })
     st.write("Raw event schema:", df.columns.tolist())
 
-# =====================================================
-# ℹ️ RUN INSTRUCTIONS
-# =====================================================
 
 st.markdown("---")
 st.markdown("**To run the dashboard:**")

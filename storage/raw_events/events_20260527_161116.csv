@@ -1,0 +1,2 @@
+event_id,event_type,user_id,product_id,order_id,price,event_time,processing_time
+e192561d-e2cd-435f-8f67-022698d95c47,purchase,user_8,product_4,b329e899-9ca3-49f8-a6fe-b1968a57afc3,563,2026-05-27T16:11:16.834762,2026-05-27T16:11:16.834788
