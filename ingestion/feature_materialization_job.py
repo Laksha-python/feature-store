@@ -91,18 +91,18 @@ def main():
 
     reference_time = datetime.now()
     feature_date = reference_time.strftime("%Y-%m-%d")
-    user_features = compute_user_features(events, reference_time)
-    product_features = compute_product_features(events, reference_time)
+    user_features = compute_user_features(events)
+    product_features = compute_product_features(events)
     net_revenue_features = compute_net_revenue_features(events, reference_time)
     error_rate = compute_error_rate()
     for name, data in user_features.items():
-        write_offline_feature(STORAGE_DIR, name, data, feature_date)
+        write_offline_feature(STORAGE_DIR, name, data, feature_date,entity_type='user')
 
     for name, data in product_features.items():
-        write_offline_feature(STORAGE_DIR, name, data, feature_date)
+        write_offline_feature(STORAGE_DIR, name, data, feature_date,entity_type='product')
 
-    write_offline_feature(STORAGE_DIR, "net_revenue_30d", net_revenue_features, feature_date)
-    write_offline_feature(STORAGE_DIR, "error_rate_last_10min", {"system": error_rate}, feature_date)
+    write_offline_feature(STORAGE_DIR, "net_revenue_30d", net_revenue_features, feature_date,entity_type='user')
+    write_offline_feature(STORAGE_DIR, "error_rate_last_10min", {"system": error_rate}, feature_date,entity_type='user')
 
     snapshot = {
         "users": {},

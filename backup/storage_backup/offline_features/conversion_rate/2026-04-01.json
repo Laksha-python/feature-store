@@ -1,0 +1,12 @@
+{
+  "feature_name": "conversion_rate",
+  "feature_date": "2026-04-01",
+  "computed_at": "2026-04-01T06:51:00.347838",
+  "values": {
+    "product_3": 0,
+    "product_1": 0,
+    "product_2": 0,
+    "product_4": 0,
+    "product_5": 0
+  }
+}

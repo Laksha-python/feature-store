@@ -1,0 +1,17 @@
+{
+  "feature_name": "rolling_7d_purchase_count",
+  "feature_date": "2026-03-05",
+  "computed_at": "2026-03-05T10:00:15.413342",
+  "values": {
+    "user_3": 8,
+    "user_10": 3,
+    "user_5": 6,
+    "user_7": 4,
+    "user_4": 3,
+    "user_8": 7,
+    "user_6": 3,
+    "user_9": 3,
+    "user_1": 3,
+    "user_2": 4
+  }
+}

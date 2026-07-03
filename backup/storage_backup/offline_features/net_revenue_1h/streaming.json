@@ -1,0 +1,13 @@
+{
+  "feature_name": "net_revenue_1h",
+  "feature_date": "streaming",
+  "computed_at": "2026-03-02T12:58:38.214823",
+  "values": {
+    "user_10": -5305.0,
+    "user_3": -1973.0,
+    "user_6": -525.0,
+    "user_2": 4327.0,
+    "user_1": 958.0,
+    "user_5": 7376.0
+  }
+}

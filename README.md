@@ -1,323 +1,327 @@
+# 🚀 Real-Time Feature Store Platform
 
-A production-inspired real-time feature store platform built using Kafka, FastAPI, PostgreSQL, Redis, Airflow, and Streamlit.
+A feature store platform built using Kafka, FastAPI, PostgreSQL, Redis, Airflow, and Streamlit.
 
-This project demonstrates modern Data Engineering, Backend Engineering, and MLOps concepts including streaming ingestion, online/offline feature serving, metadata governance, point-in-time querying, schema evolution tracking, and low-latency feature access.
+The system ingests user events, computes behavioral features, stores them in both online and offline stores, tracks feature metadata, and exposes feature-serving APIs for downstream applications.
 
+---
 
+# 📌 Problem Statement
 
-Modern ML systems require reliable feature infrastructure to ensure consistency between training and inference pipelines.
+Machine learning systems require consistent, reusable, and low-latency features for both training and inference.
 
-This project implements a simplified but realistic feature store architecture that supports:
+Without a centralized feature platform:
 
-* Real-time feature ingestion
-* Streaming event processing
-* Online and offline feature stores
-* Feature metadata governance
-* Point-in-time feature retrieval
-* Dead Letter Queue (DLQ) handling
-* Workflow orchestration
-* Monitoring dashboards
+- Feature logic becomes duplicated across teams
+- Historical feature values are difficult to manage
+- Feature freshness is hard to monitor
+- Online and offline data become inconsistent
+- Feature lineage and schema changes are difficult to track
 
-The system is designed to resemble production-style ML infrastructure and backend data platforms.
+This project demonstrates how a feature store can solve these challenges using an event-driven architecture.
 
+---
 
+# 🏗️ Architecture
 
 ![Architecture](docs/architecture.png)
 
+### System Flow
 
+```text
+Event Producer
+      │
+      ▼
+    Kafka
+      │
+      ▼
+Feature Materialization
+      │
+      ├────────► PostgreSQL (Offline Store)
+      │
+      ├────────► Redis (Online Store)
+      │
+      └────────► Metadata Layer
+                        │
+                        ▼
+                    FastAPI
+                        │
+                        ▼
+                   Streamlit UI
+```
 
+---
 
-![Control Plane](docs/screenshots/control-plane.png)
+# ✨ Key Features
 
+## Event Ingestion
 
+- Kafka-based event streaming
+- Purchase, refund, and view event processing
+- Event validation pipeline
+- Dead Letter Queue (DLQ) support
 
-![Analytics](docs/screenshots/analytics.png)
+## Feature Computation
 
+### User Features
 
+- Rolling 7-day purchase count
+- Rolling 30-day spend
+- Recency days
+- Net revenue (30-day)
 
-![Feature Monitoring](docs/screenshots/features.png)
+### Product Features
 
+- Rolling 1-hour sales
+- Rolling 24-hour sales
+- Conversion rate
+- Refund rate
 
-![Swagger UI](docs/screenshots/swagger-ui.png)
+## Offline Feature Store
 
+Implemented using PostgreSQL.
 
+Supports:
 
-* Kafka-based event streaming
-* Real-time user event ingestion
-* Kafka consumer processing pipeline
-* DLQ support for invalid or failed events
+- Historical feature storage
+- Batch analytics
+- Feature backfills
+- Durable persistence
 
+## Online Feature Store
 
-* Event validation
-* Feature transformation
-* Aggregation pipelines
-* Schema validation
-* Feature computation workflows
+Implemented using Redis.
 
+Supports:
 
+- Low-latency feature access
+- Cached feature serving
+- Fast API retrieval
 
-* Historical feature storage
-* Batch retrieval
-* Point-in-time feature queries
-* Persistent analytics storage
+## Metadata Governance
 
+Tracks:
 
-* Low-latency feature serving
-* Real-time feature access
-* Cached feature retrieval
+- Feature registry
+- Schema history
+- Feature lineage
+- Feature freshness
 
-
-* Feature registry
-* Schema history tracking
-* Data lineage tracking
-* Feature freshness monitoring
-* Governance APIs
-
+## Feature Serving API
 
 Built using FastAPI.
 
 Provides:
 
-* Feature retrieval APIs
-* Metadata APIs
-* Point-in-time access APIs
-* Monitoring and governance APIs
-* Health check endpoints
+- User feature retrieval
+- Product feature retrieval
+- Metadata endpoints
+- Health checks
 
+## Workflow Orchestration
 
-* Apache Airflow DAG orchestration
-* Scheduled feature workflows
-* Pipeline management
+Built using Apache Airflow.
 
+Supports:
 
-Built using Streamlit.
+- Scheduled feature pipelines
+- Feature refresh workflows
+- Monitoring jobs
 
-Includes:
+---
 
-* Feature monitoring
-* Schema explorer
-* DLQ inspection
-* Freshness dashboard
+# 🛠️ Tech Stack
 
+| Layer | Technology |
+|---------|------------|
+| Streaming | Apache Kafka |
+| API Layer | FastAPI |
+| Offline Store | PostgreSQL |
+| Online Store | Redis |
+| Orchestration | Apache Airflow |
+| Dashboard | Streamlit |
+| Containerization | Docker |
+| Language | Python |
 
+---
 
-| Category         | Technologies   |
-| ---------------- | -------------- |
-| Streaming        | Apache Kafka   |
-| Backend API      | FastAPI        |
-| Offline Store    | PostgreSQL     |
-| Online Store     | Redis          |
-| Orchestration    | Apache Airflow |
-| Dashboard        | Streamlit      |
-| Language         | Python         |
-| Containerization | Docker         |
+# 📊 Dashboard Screenshots
 
+## Control Plane
 
+![Control Plane](docs/screenshots/control-plane.png)
+
+## Analytics Dashboard
+
+![Analytics](docs/screenshots/analytics.png)
+
+## Feature Monitoring
+
+![Feature Monitoring](docs/screenshots/features.png)
+
+## API Documentation
+
+![Swagger UI](docs/screenshots/swagger-ui.png)
+
+---
+
+# 📁 Project Structure
 
 ```text
 feature-store/
 │
-├── api/                        # FastAPI backend services
-├── ingestion/                 # Event ingestion logic
-├── processing/                # Feature transformation and validation
-├── storage/                   # PostgreSQL and Redis integrations
-├── stream_processing/         # Kafka consumers and streaming logic
-├── airflow_orchestration/     # Airflow DAGs and workflows
-├── ui/                        # Streamlit dashboard
-├── docker/                    # Docker configuration files
-├── tests/                     # Test suites
-├── docs/                      # Architecture diagrams and documentation
-├── requirements.txt
+├── api/                      
+├── ingestion/                
+├── processing/               
+├── storage/                  
+├── stream_processing/        
+├── airflow_orchestration/    
+├── ui/                       
+├── docs/                     
+├── tests/                    
+│
 ├── docker-compose.yml
+├── requirements.txt
 └── README.md
 ```
 
+---
 
+# 🔄 Example Feature Flow
 
+### Incoming Event
 
-1. User events are generated from producers or batch CSV sources.
-2. Events are pushed into Kafka topics.
-3. Kafka consumers process streaming events.
-4. Feature processing engine validates and transforms incoming data.
-5. Processed features are written into:
-
-   * PostgreSQL (offline store)
-   * Redis (online store)
-   * Metadata governance store
-6. FastAPI exposes feature-serving and governance APIs.
-7. Streamlit dashboard visualizes system monitoring and metadata.
-
-
-
-
-```http
-GET /features/{user_id}
+```json
+{
+  "event_type": "purchase",
+  "user_id": "user_5",
+  "product_id": "product_1",
+  "price": 838
+}
 ```
 
-Retrieve real-time features for a user.
+### Computed Features
 
-
-```http
-GET /features/{user_id}/at?ts=<timestamp>
+```json
+{
+  "rolling_7d_purchase_count": 5,
+  "rolling_30d_spend": 2840,
+  "recency_days": 1,
+  "net_revenue_30d": 2500
+}
 ```
 
-Retrieve historical point-in-time features.
+### Data Flow
 
-
-
-```http
-GET /metadata/features
+```text
+Kafka
+  ↓
+Feature Materialization
+  ↓
+PostgreSQL
+  ↓
+Redis
+  ↓
+FastAPI
+  ↓
+Dashboard
 ```
 
-Retrieve feature registry metadata.
+---
 
+# 🚀 Running the Project
 
-```http
-GET /metadata/lineage
-```
-
-Retrieve feature lineage information.
-
-
-```http
-GET /schema/history
-```
-
-Retrieve schema evolution history.
-
-
-
-```http
-GET /health
-```
-
-Basic application health check.
-
-
-```http
-GET /health/postgres
-```
-
-PostgreSQL connectivity check.
-
-
-```http
-GET /health/redis
-```
-
-Redis connectivity check.
-
-
-
-
-Make sure the following are installed:
-
-* Python 3.10+
-* Docker
-* Docker Compose
-
-
-
+## Clone Repository
 
 ```bash
 git clone https://github.com/Laksha-python/feature-store.git
 cd feature-store
 ```
 
-
-
-```bash
-python -m venv venv
-```
-
-
-```bash
-venv\Scripts\activate
-```
-
-
-```bash
-source venv/bin/activate
-```
-
-
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-
-
+## Start Infrastructure
 
 ```bash
-docker-compose up --build
+docker-compose up -d
 ```
 
 This starts:
 
-* Kafka
-* Zookeeper
-* PostgreSQL
-* Redis
-* FastAPI
-* Streamlit
-* Airflow
+- Kafka
+- PostgreSQL
+- Redis
+- Airflow
 
+## Run Feature Materialization
 
-
-Open:
-
-```text
-http://localhost:8501
+```bash
+python ingestion/feature_materialization_job.py
 ```
 
+## Start FastAPI
 
+```bash
+uvicorn api.main:app --reload
+```
 
-Open:
+API Docs:
 
 ```text
 http://localhost:8000/docs
 ```
 
+## Start Streamlit Dashboard
 
+```bash
+streamlit run ui/app.py
+```
 
-Potential future enhancements:
+Dashboard:
 
-* Feature versioning
-* TTL-based Redis freshness
-* Prometheus/Grafana monitoring
-* Kubernetes deployment
-* CI/CD pipelines
-* Streaming aggregations
-* Authentication and RBAC
-* Advanced observability
+```text
+http://localhost:8501
+```
 
+---
 
+# 🎯 Engineering Concepts Demonstrated
 
-This project demonstrates:
+- Event-Driven Architecture
+- Streaming Data Pipelines
+- Online & Offline Feature Stores
+- Feature Materialization
+- Metadata Management
+- Data Lineage Tracking
+- Schema Evolution Monitoring
+- Feature Freshness Tracking
+- Workflow Orchestration
+- Backend API Development
+- Distributed System Fundamentals
 
-* Event-driven architecture
-* Real-time streaming systems
-* ETL pipelines
-* Online/offline feature stores
-* Metadata governance
-* Data lineage tracking
-* Low-latency serving
-* Distributed system concepts
-* Workflow orchestration
-* Backend API development
+---
 
+# 🔮 Future Improvements
 
+- Real-time Kafka consumers
+- Feature versioning
+- Feature access controls
+- Automated data quality checks
+- Prometheus & Grafana monitoring
+- CI/CD pipeline
+- Kubernetes deployment
 
-This architecture can support:
+---
 
-* Recommendation systems
-* Fraud detection pipelines
-* Real-time analytics
-* Personalization systems
-* Feature engineering platforms
-* ML training and inference systems
+# 👨‍💻 Author
 
+**Laksha K**
 
+Data Engineering • Backend Engineering • Data Platforms
 
-Laksha K
+---
+⭐ If you found this project interesting, feel free to star the repository.

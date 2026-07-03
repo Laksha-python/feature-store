@@ -1,0 +1,9 @@
+{
+  "feature_name": "rolling_1h_sales",
+  "feature_date": "2026-03-02",
+  "computed_at": "2026-03-02T18:04:12.112786",
+  "values": {
+    "product_4": 2,
+    "product_3": 1
+  }
+}

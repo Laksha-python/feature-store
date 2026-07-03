@@ -1,0 +1,47 @@
+{
+  "rolling_7d_purchase_count": {
+    "definition": "compute_user_features -> count purchases in last 7 days",
+    "owner": "data_team",
+    "sla": "24h"
+  },
+  "rolling_30d_spend": {
+    "definition": "compute_user_features -> sum purchase price in last 30 days",
+    "owner": "data_team",
+    "sla": "24h"
+  },
+  "recency_days": {
+    "definition": "compute_user_features -> days since last event",
+    "owner": "data_team",
+    "sla": "24h"
+  },
+  "rolling_1h_sales": {
+    "definition": "compute_product_features -> purchases in last hour",
+    "owner": "data_team",
+    "sla": "24h"
+  },
+  "rolling_24h_sales": {
+    "definition": "compute_product_features -> purchases in last 24 hours",
+    "owner": "data_team",
+    "sla": "24h"
+  },
+  "conversion_rate": {
+    "definition": "compute_product_features -> purchases/views",
+    "owner": "data_team",
+    "sla": "24h"
+  },
+  "refund_rate": {
+    "definition": "compute_product_features -> refunds/purchases",
+    "owner": "data_team",
+    "sla": "24h"
+  },
+  "net_revenue_30d": {
+    "definition": "compute_net_revenue_features -> revenue delta per user",
+    "owner": "finance",
+    "sla": "24h"
+  },
+  "error_rate_last_10min": {
+    "definition": "compute_error_rate -> dlq/total events",
+    "owner": "platform",
+    "sla": "10m"
+  }
+}

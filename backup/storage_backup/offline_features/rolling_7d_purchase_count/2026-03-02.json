@@ -1,0 +1,9 @@
+{
+  "feature_name": "rolling_7d_purchase_count",
+  "feature_date": "2026-03-02",
+  "computed_at": "2026-03-02T18:04:12.108155",
+  "values": {
+    "user_9": 1,
+    "user_1": 2
+  }
+}

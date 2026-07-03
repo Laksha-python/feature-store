@@ -1,0 +1,17 @@
+{
+  "feature_name": "recency_days",
+  "feature_date": "2026-04-01",
+  "computed_at": "2026-04-01T06:51:00.344377",
+  "values": {
+    "user_3": 27,
+    "user_10": 27,
+    "user_5": 27,
+    "user_8": 27,
+    "user_4": 27,
+    "user_7": 27,
+    "user_6": 27,
+    "user_2": 27,
+    "user_9": 27,
+    "user_1": 27
+  }
+}
